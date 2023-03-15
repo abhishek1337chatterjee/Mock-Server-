@@ -6,4 +6,4 @@ const middlewares = jsonServer.defaults();
 server.use(middlewares);
 server.use(router);
 
-server.listen(port);
+server.listen(8000);
