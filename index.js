@@ -4,6 +4,32 @@ const router = jsonServer.router("db.json");
 const middlewares = jsonServer.defaults();
 
 server.use(middlewares);
-server.use(router);
+server.use(jsonServer.bodyParser);
 
-server.listen(8000);
+server.post('/auth/register', (req, res) => {
+  const db = router.db;
+  const users = db.get('users').value();
+  const userExists = users.find(user => user.email === req.body.email);
+  if (userExists) {
+    res.status(400).send({ error: 'Email already exists' });
+  } else {
+    db.get('users').push(req.body).write();
+    res.status(201).send({ message: 'User created successfully' });
+  }
+});
+
+server.post('/auth/login', (req, res) => {
+  const db = router.db;
+  const users = db.get('users').value();
+  const userExists = users.find(user => user.email === req.body.email && user.password === req.body.password);
+  if (userExists) {
+    res.status(200).send({ message: 'Logged in successfully' });
+  } else {
+    res.status(400).send({ error: 'Invalid email or password' });
+  }
+});
+
+server.use(router);
+server.listen(3000, () => {
+  console.log('JSON Server is running');
+});
