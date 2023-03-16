@@ -23,9 +23,9 @@ server.post('/auth/login', (req, res) => {
   const users = db.get('users').value();
   const userExists = users.find(user => user.email === req.body.email && user.password === req.body.password);
   if (userExists) {
-    res.status(200).send({ message: 'Logged in successfully' });
+    res.status(200).send({ message: 'Login successfully' });
   } else {
-    res.status(400).send({ error: 'Invalid email or password' });
+    res.status(400).send({ error: 'Login failed' });
   }
 });
 
